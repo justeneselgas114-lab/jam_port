@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
+
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { 
   ChevronRight, 
   Menu, 
@@ -43,6 +44,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const menuRef = useRef<HTMLDivElement>(null);
   
   const navItems = [
     { name: 'About', href: '#about', id: 'about' },
@@ -51,6 +53,24 @@ const Navbar = () => {
     { name: 'Portfolio', href: '#portfolio', id: 'portfolio' },
     { name: 'Contact', href: '#contact', id: 'contact' },
   ];
+
+  // Lock body scroll and prevent overscroll when mobile menu is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    };
+  }, [isOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -89,22 +109,26 @@ const Navbar = () => {
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
-    scrollToId(id);
     setIsOpen(false);
+    // Use a small timeout to allow state update to propagate and scroll cleanly
+    requestAnimationFrame(() => {
+      scrollToId(id);
+    });
   };
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-500 ease-in-out ${scrolled ? 'glass-card py-3 shadow-2xl' : 'bg-transparent py-6'}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center">
+    <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-300 ease-in-out ${scrolled || isOpen ? 'glass-card py-3 sm:py-4 shadow-2xl' : 'bg-transparent py-6'}`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center relative z-[120]">
         <a 
           href="#home" 
           onClick={(e) => handleNavClick(e, 'home')}
-          className="flex items-center gap-2 group relative z-50"
+          className="flex items-center gap-2 group relative z-[130]"
         >
           <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-lg sm:text-xl text-white group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-blue-600/20">J</div>
           <span className="text-lg sm:text-xl font-bold tracking-tight text-white">JUSTENE <span className="text-blue-500 italic">AUTOMATION</span></span>
         </a>
         
+        {/* Desktop Nav */}
         <div className="hidden md:flex gap-1 items-center font-medium text-[10px] lg:text-[11px] tracking-widest uppercase text-gray-400 relative bg-gray-900/40 p-1 rounded-full border border-gray-800/50">
           {navItems.map((item) => {
             const isActive = activeSection === item.id;
@@ -132,37 +156,52 @@ const Navbar = () => {
           </a>
         </div>
 
-        <button className="md:hidden text-white p-2 relative z-50 rounded-lg hover:bg-gray-800/50 transition-colors" onClick={() => setIsOpen(!isOpen)} aria-label="Toggle Menu">
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
+        {/* Hamburger Trigger */}
+        <button 
+          className="md:hidden text-white p-2 relative z-[130] rounded-lg hover:bg-gray-800/50 transition-colors focus:outline-none" 
+          onClick={() => setIsOpen(!isOpen)} 
+          aria-label="Toggle Menu"
+        >
+          {isOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
       </div>
 
-      <div className={`md:hidden fixed inset-0 bg-black/95 backdrop-blur-xl z-40 transition-all duration-500 ${isOpen ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full pointer-events-none'}`}>
-        <div className="flex flex-col h-full justify-center p-8 space-y-6">
-          <div className="text-[10px] font-bold text-blue-500 tracking-[0.3em] uppercase mb-4">Navigation</div>
-          {navItems.map((item) => (
-            <a 
-              key={item.name} 
-              href={item.href} 
-              onClick={(e) => handleNavClick(e, item.id)} 
-              className={`text-4xl font-black uppercase tracking-tighter flex items-center gap-4 transition-all duration-300 ${activeSection === item.id ? 'text-white translate-x-4' : 'text-gray-700'}`}
-            >
-              {activeSection === item.id && <div className="w-3 h-3 bg-blue-600 rounded-full shadow-[0_0_20px_#2563eb]"></div>}
-              {item.name}
-            </a>
-          ))}
-          <div className="pt-8 border-t border-gray-800 flex flex-col gap-4">
+      {/* Mobile Menu Overlay - Robust Layout */}
+      {/* Fix: Removed invalid 'transformZ' property and added 'transform-gpu' class for hardware acceleration support */}
+      <div 
+        ref={menuRef}
+        className={`md:hidden fixed inset-0 bg-black/98 backdrop-blur-3xl z-[110] transition-all duration-500 transform-gpu ease-in-out flex flex-col items-stretch ${isOpen ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full pointer-events-none'}`}
+        style={{ height: '100dvh', width: '100vw' }}
+      >
+        <div className="flex flex-col h-full pt-24 sm:pt-32 pb-10 px-8 overflow-y-auto">
+          <div className="text-[10px] font-bold text-blue-500 tracking-[0.4em] uppercase mb-10 opacity-60">System Navigation</div>
+          
+          <div className="flex flex-col gap-8 flex-grow">
+            {navItems.map((item) => (
+              <a 
+                key={item.name} 
+                href={item.href} 
+                onClick={(e) => handleNavClick(e, item.id)} 
+                className={`text-5xl font-black uppercase tracking-tighter flex items-center gap-5 transition-all duration-300 ${activeSection === item.id ? 'text-white translate-x-2' : 'text-gray-800 hover:text-gray-400'}`}
+              >
+                {activeSection === item.id && <div className="w-2.5 h-2.5 bg-blue-600 rounded-full shadow-[0_0_20px_#2563eb]"></div>}
+                {item.name}
+              </a>
+            ))}
+          </div>
+
+          <div className="mt-auto pt-10 border-t border-gray-900 flex flex-col gap-6">
              <a 
                href="#contact" 
                onClick={(e) => handleNavClick(e, 'contact')} 
-               className="bg-blue-600 text-center text-white py-5 rounded-2xl font-black uppercase tracking-widest shadow-2xl shadow-blue-600/40"
+               className="bg-blue-600 text-center text-white py-6 rounded-2xl font-black uppercase tracking-widest shadow-2xl shadow-blue-600/40 active:scale-95 transition-transform text-sm"
              >
-               Start Project
+               Start Project Initialisation
              </a>
-             <div className="flex justify-center gap-6 pt-4 grayscale opacity-40 text-white">
-               <Linkedin size={24} />
-               <Github size={24} />
-               <Mail size={24} />
+             <div className="flex justify-center gap-10 pt-4 grayscale opacity-30 text-white">
+               <a href="#" className="hover:text-blue-500 transition-colors"><Linkedin size={32} /></a>
+               <a href="#" className="hover:text-blue-500 transition-colors"><Github size={32} /></a>
+               <a href="#" className="hover:text-blue-500 transition-colors"><Mail size={32} /></a>
              </div>
           </div>
         </div>
@@ -267,7 +306,7 @@ const About = () => (
         <div className="relative group max-w-sm mx-auto md:max-w-none">
           <div className="absolute inset-0 bg-blue-600 rounded-3xl transform rotate-3 group-hover:rotate-6 transition-all duration-500 -z-10 opacity-50"></div>
           <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/20 to-transparent rounded-3xl -z-5"></div>
-          <img src="https://i.postimg.cc/ydq5L5Ns/Black_and_White_Minimalist_Corporate_Personal_Profile_Instagram_Post.png" alt="Justene" className="rounded-3xl shadow-2xl w-full object-cover aspect-[4/5] grayscale hover:grayscale-0 transition-all duration-700" />
+          <img src="https://picsum.photos/seed/justene/800/1000" alt="Justene" className="rounded-3xl shadow-2xl w-full object-cover aspect-[4/5] grayscale hover:grayscale-0 transition-all duration-700" />
           <div className="absolute -bottom-6 -right-6 glass-card p-6 rounded-2xl border-blue-500/30 shadow-2xl shadow-black">
             <div className="text-4xl sm:text-5xl font-black text-blue-500 mb-1">16+</div>
             <div className="text-[10px] sm:text-xs uppercase tracking-[0.2em] font-black text-gray-400">Months of Deep GHL Systems Execution</div>
@@ -443,17 +482,17 @@ const ProjectModal = ({ project, onClose }: { project: CaseStudy | null, onClose
     if (project) {
       document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = '';
     }
     return () => {
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = '';
     };
   }, [project]);
 
   if (!project) return null;
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-10 animate-in fade-in duration-300">
+    <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 sm:p-10 animate-in fade-in duration-300">
       <div className="absolute inset-0 bg-black/90 backdrop-blur-xl" onClick={onClose}></div>
       <div className="relative glass-card w-full max-w-5xl rounded-[2rem] sm:rounded-[3rem] border border-white/10 shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-500 h-full max-h-[90vh]">
         <div className="p-6 sm:p-10 flex justify-between items-center border-b border-white/5 bg-gray-900/40 shrink-0">
@@ -632,7 +671,6 @@ const IdealClient = () => (
 
 const Contact = () => {
   const [captchaAnswer, setCaptchaAnswer] = useState('');
-  const [isHuman, setIsHuman] = useState(false);
   const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   
   // Math challenge for simple human verification
@@ -843,7 +881,7 @@ const WhatsAppButton = () => {
       href={whatsappUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-6 right-6 z-[100] group flex items-center gap-3"
+      className="fixed bottom-6 right-6 z-[200] group flex items-center gap-3"
       aria-label="Chat with Justene on WhatsApp"
     >
       <div className="bg-gray-900/90 backdrop-blur-xl text-white border border-white/10 px-5 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-2xl opacity-80 sm:opacity-60 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-500 pointer-events-none hidden sm:flex items-center gap-3 border-l-4 border-l-[#25D366]">
@@ -871,7 +909,7 @@ const WhatsAppButton = () => {
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-[#030712] selection:bg-blue-600 selection:text-white antialiased">
+    <div className="min-h-screen bg-[#030712] selection:bg-blue-600 selection:text-white antialiased overflow-x-hidden">
       <Navbar />
       <main>
         <Hero />
