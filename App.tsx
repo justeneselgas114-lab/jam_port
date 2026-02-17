@@ -116,7 +116,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-300 ease-in-out ${scrolled || isOpen ? 'bg-gray-950/98 backdrop-blur-xl border-b border-white/10 py-3 sm:py-4 shadow-2xl' : 'bg-transparent py-6'}`}>
+    <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-300 ease-in-out ${scrolled || isOpen ? 'bg-gray-950 border-b border-white/10 py-3 sm:py-4 shadow-2xl' : 'bg-black/20 backdrop-blur-sm py-6'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center relative z-[120]">
         <a 
           href="#home" 
@@ -128,7 +128,7 @@ const Navbar = () => {
         </a>
         
         {/* Desktop Nav */}
-        <div className="hidden md:flex gap-1 items-center font-medium text-[10px] lg:text-[11px] tracking-widest uppercase text-gray-400 relative bg-gray-900/40 p-1 rounded-full border border-gray-800/50">
+        <div className="hidden md:flex gap-1 items-center font-medium text-[10px] lg:text-[11px] tracking-widest uppercase text-white relative bg-gray-900/60 p-1 rounded-full border border-gray-700/50">
           {navItems.map((item) => {
             const isActive = activeSection === item.id;
             return (
@@ -136,7 +136,7 @@ const Navbar = () => {
                 key={item.name} 
                 href={item.href} 
                 onClick={(e) => handleNavClick(e, item.id)}
-                className={`px-4 py-2 rounded-full transition-all duration-500 relative z-10 ${isActive ? 'text-white' : 'hover:text-gray-200'}`}
+                className={`px-4 py-2 rounded-full transition-all duration-500 relative z-10 ${isActive ? 'text-white font-black' : 'text-gray-300 hover:text-white'}`}
               >
                 {item.name}
                 {isActive && (
@@ -145,7 +145,7 @@ const Navbar = () => {
               </a>
             );
           })}
-          <div className="w-px h-4 bg-gray-800 mx-2"></div>
+          <div className="w-px h-4 bg-gray-700 mx-2"></div>
           <a 
             href="#contact" 
             onClick={(e) => handleNavClick(e, 'contact')}
@@ -172,7 +172,7 @@ const Navbar = () => {
         style={{ height: '100dvh', width: '100vw' }}
       >
         <div className="flex flex-col h-full pt-24 sm:pt-32 pb-10 px-8 overflow-y-auto">
-          <div className="text-[10px] font-bold text-blue-500 tracking-[0.4em] uppercase mb-10 opacity-60">System Navigation</div>
+          <div className="text-[10px] font-bold text-blue-500 tracking-[0.4em] uppercase mb-10 opacity-80">System Navigation</div>
           
           <div className="flex flex-col gap-8 flex-grow">
             {navItems.map((item) => (
@@ -180,7 +180,7 @@ const Navbar = () => {
                 key={item.name} 
                 href={item.href} 
                 onClick={(e) => handleNavClick(e, item.id)} 
-                className={`text-5xl font-black uppercase tracking-tighter flex items-center gap-5 transition-all duration-300 ${activeSection === item.id ? 'text-white translate-x-2' : 'text-gray-800 hover:text-gray-400'}`}
+                className={`text-5xl font-black uppercase tracking-tighter flex items-center gap-5 transition-all duration-300 ${activeSection === item.id ? 'text-white translate-x-2' : 'text-white/40 hover:text-white'}`}
               >
                 {activeSection === item.id && <div className="w-2.5 h-2.5 bg-blue-600 rounded-full shadow-[0_0_20px_#2563eb]"></div>}
                 {item.name}
@@ -188,7 +188,7 @@ const Navbar = () => {
             ))}
           </div>
 
-          <div className="mt-auto pt-10 border-t border-gray-900 flex flex-col gap-6">
+          <div className="mt-auto pt-10 border-t border-gray-800 flex flex-col gap-6">
              <a 
                href="#contact" 
                onClick={(e) => handleNavClick(e, 'contact')} 
@@ -196,7 +196,7 @@ const Navbar = () => {
              >
                Start Project Initialisation
              </a>
-             <div className="flex justify-center gap-10 pt-4 grayscale opacity-30 text-white">
+             <div className="flex justify-center gap-10 pt-4 grayscale opacity-50 text-white">
                <a href="#" className="hover:text-blue-500 transition-colors"><Linkedin size={32} /></a>
                <a href="#" className="hover:text-blue-500 transition-colors"><Github size={32} /></a>
                <a href="#" className="hover:text-blue-500 transition-colors"><Mail size={32} /></a>
