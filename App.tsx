@@ -304,7 +304,7 @@ const About = () => (
         <div className="relative group max-w-sm mx-auto md:max-w-none">
           <div className="absolute inset-0 bg-blue-600 rounded-3xl transform rotate-3 group-hover:rotate-6 transition-all duration-500 -z-10 opacity-50"></div>
           <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/20 to-transparent rounded-3xl -z-5"></div>
-          <img src="https://picsum.photos/seed/justene/800/1000" alt="Justene" className="rounded-3xl shadow-2xl w-full object-cover aspect-[4/5] grayscale hover:grayscale-0 transition-all duration-700" />
+          <img src="https://i.postimg.cc/ydq5L5Ns/Black_and_White_Minimalist_Corporate_Personal_Profile_Instagram_Post.png" alt="Justene" className="rounded-3xl shadow-2xl w-full object-cover aspect-[4/5] grayscale hover:grayscale-0 transition-all duration-700" />
           <div className="absolute -bottom-6 -right-6 glass-card p-6 rounded-2xl border-blue-500/30 shadow-2xl shadow-black">
             <div className="text-4xl sm:text-5xl font-black text-blue-500 mb-1">16+</div>
             <div className="text-[10px] sm:text-xs uppercase tracking-[0.2em] font-black text-gray-400">Months of Deep GHL Systems Execution</div>
