@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { 
   ChevronRight, 
@@ -117,7 +116,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-300 ease-in-out ${scrolled || isOpen ? 'glass-card py-3 sm:py-4 shadow-2xl' : 'bg-transparent py-6'}`}>
+    <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-300 ease-in-out ${scrolled || isOpen ? 'bg-gray-950/98 backdrop-blur-xl border-b border-white/10 py-3 sm:py-4 shadow-2xl' : 'bg-transparent py-6'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center relative z-[120]">
         <a 
           href="#home" 
@@ -167,10 +166,9 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Menu Overlay - Robust Layout */}
-      {/* Fix: Removed invalid 'transformZ' property and added 'transform-gpu' class for hardware acceleration support */}
       <div 
         ref={menuRef}
-        className={`md:hidden fixed inset-0 bg-black/98 backdrop-blur-3xl z-[110] transition-all duration-500 transform-gpu ease-in-out flex flex-col items-stretch ${isOpen ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full pointer-events-none'}`}
+        className={`md:hidden fixed inset-0 bg-gray-950 z-[110] transition-all duration-500 transform-gpu ease-in-out flex flex-col items-stretch ${isOpen ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full pointer-events-none'}`}
         style={{ height: '100dvh', width: '100vw' }}
       >
         <div className="flex flex-col h-full pt-24 sm:pt-32 pb-10 px-8 overflow-y-auto">
