@@ -739,7 +739,7 @@ const Footer = () => (
 );
 
 const WhatsAppButton = () => {
-  const phoneNumber = "1234567890"; // Replace with your actual number
+  const phoneNumber = "639638296973"; // Updated with user provided number (international format for Philippines 0963...)
   const message = "Hi Justene, I'm interested in automating my business systems. Let's talk!";
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 
