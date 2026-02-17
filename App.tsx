@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { 
   ChevronRight, 
   Menu, 
@@ -16,7 +15,9 @@ import {
   Calendar,
   Activity,
   Play,
-  Clock
+  Clock,
+  ShieldAlert,
+  RotateCcw
 } from 'lucide-react';
 import { SKILLS, SERVICES, CASE_STUDIES } from './constants';
 import { CaseStudy } from './types';
@@ -629,83 +630,176 @@ const IdealClient = () => (
   </section>
 );
 
-const Contact = () => (
-  <section id="contact" className="py-20 sm:py-32 px-4 sm:px-6 bg-gradient-to-b from-transparent to-blue-900/20">
-    <div className="max-w-7xl mx-auto glass-card rounded-[3rem] sm:rounded-[4rem] p-8 sm:p-14 md:p-20 lg:p-24 overflow-hidden relative border border-white/5">
-      <div className="absolute top-0 right-0 w-64 h-64 sm:w-96 sm:h-96 bg-blue-500/10 blur-[100px] sm:blur-[150px] rounded-full -z-10"></div>
-      <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 relative z-10">
-        <div className="space-y-10 text-center lg:text-left">
-          <div className="space-y-4">
-            <h2 className="text-5xl sm:text-7xl font-black leading-[0.9] tracking-tighter text-white">Let's Build Your <br/><span className="gradient-text">Profit Machine.</span></h2>
-            <p className="text-lg sm:text-2xl text-gray-400 font-medium max-w-md mx-auto lg:mx-0">
-              Stop hiring assistants to do tasks. Hire an architect to build your future.
-            </p>
-          </div>
-          <div className="space-y-6 text-left max-w-md mx-auto lg:mx-0">
-            {[
-              { icon: <Calendar size={22} />, text: "Available for 30-min Strategy Calls", color: "text-blue-400", bg: "bg-blue-600/10", border: "border-blue-500/20" },
-              { icon: <Globe size={22} />, text: "Serving Clients in US, UK, EU & AU", color: "text-purple-400", bg: "bg-purple-600/10", border: "border-purple-500/20" },
-              { icon: <ShieldCheck size={22} />, text: "GDPR Compliant & Secure Operations", color: "text-green-400", bg: "bg-green-600/10", border: "border-green-500/20" }
-            ].map((item, i) => (
-              <div key={i} className="flex items-center gap-6 text-base sm:text-lg font-bold group text-white">
-                <div className={`w-14 h-14 ${item.bg} rounded-2xl flex items-center justify-center ${item.color} border ${item.border} shrink-0 shadow-2xl group-hover:scale-110 transition-transform`}>
-                  {item.icon}
+const Contact = () => {
+  const [captchaAnswer, setCaptchaAnswer] = useState('');
+  const [isHuman, setIsHuman] = useState(false);
+  const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  
+  // Math challenge for simple human verification
+  const challenge = useMemo(() => {
+    const a = Math.floor(Math.random() * 9) + 1;
+    const b = Math.floor(Math.random() * 9) + 1;
+    return { a, b, answer: a + b };
+  }, [formStatus]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Security checks
+    const honeypot = (e.target as any).website?.value;
+    if (honeypot) {
+      console.warn('Bot detected');
+      return;
+    }
+
+    if (parseInt(captchaAnswer) !== challenge.answer) {
+      setFormStatus('error');
+      setTimeout(() => setFormStatus('idle'), 3000);
+      return;
+    }
+
+    setFormStatus('submitting');
+    // Simulated submission
+    setTimeout(() => {
+      setFormStatus('success');
+      setCaptchaAnswer('');
+    }, 1500);
+  };
+
+  return (
+    <section id="contact" className="py-20 sm:py-32 px-4 sm:px-6 bg-gradient-to-b from-transparent to-blue-900/20">
+      <div className="max-w-7xl mx-auto glass-card rounded-[3rem] sm:rounded-[4rem] p-8 sm:p-14 md:p-20 lg:p-24 overflow-hidden relative border border-white/5">
+        <div className="absolute top-0 right-0 w-64 h-64 sm:w-96 sm:h-96 bg-blue-500/10 blur-[100px] sm:blur-[150px] rounded-full -z-10"></div>
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 relative z-10">
+          <div className="space-y-10 text-center lg:text-left">
+            <div className="space-y-4">
+              <h2 className="text-5xl sm:text-7xl font-black leading-[0.9] tracking-tighter text-white">Let's Build Your <br/><span className="gradient-text">Profit Machine.</span></h2>
+              <p className="text-lg sm:text-2xl text-gray-400 font-medium max-w-md mx-auto lg:mx-0">
+                Stop hiring assistants to do tasks. Hire an architect to build your future.
+              </p>
+            </div>
+            <div className="space-y-6 text-left max-w-md mx-auto lg:mx-0">
+              {[
+                { icon: <Calendar size={22} />, text: "Available for 30-min Strategy Calls", color: "text-blue-400", bg: "bg-blue-600/10", border: "border-blue-500/20" },
+                { icon: <Globe size={22} />, text: "Serving Clients in US, UK, EU & AU", color: "text-purple-400", bg: "bg-purple-600/10", border: "border-purple-500/20" },
+                { icon: <ShieldCheck size={22} />, text: "GDPR Compliant & Secure Operations", color: "text-green-400", bg: "bg-green-600/10", border: "border-green-500/20" }
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-6 text-base sm:text-lg font-bold group text-white">
+                  <div className={`w-14 h-14 ${item.bg} rounded-2xl flex items-center justify-center ${item.color} border ${item.border} shrink-0 shadow-2xl group-hover:scale-110 transition-transform`}>
+                    {item.icon}
+                  </div>
+                  <span className="text-gray-300 group-hover:text-white transition-colors">{item.text}</span>
                 </div>
-                <span className="text-gray-300 group-hover:text-white transition-colors">{item.text}</span>
-              </div>
-            ))}
+              ))}
+            </div>
+            <div className="flex justify-center lg:justify-start gap-6 pt-6">
+              <a href="#" className="p-4 bg-gray-800 rounded-2xl hover:bg-blue-600 transition-all shadow-2xl active:scale-90 border border-white/5 text-white" aria-label="LinkedIn"><Linkedin size={24} /></a>
+              <a href="#" className="p-4 bg-gray-800 rounded-2xl hover:bg-blue-600 transition-all shadow-2xl active:scale-90 border border-white/5 text-white" aria-label="Github"><Github size={24} /></a>
+              <a href="mailto:hello@justeneautomation.com" className="p-4 bg-gray-800 rounded-2xl hover:bg-blue-600 transition-all shadow-2xl active:scale-90 border border-white/5 text-white" aria-label="Email"><Mail size={24} /></a>
+            </div>
           </div>
-          <div className="flex justify-center lg:justify-start gap-6 pt-6">
-            <a href="#" className="p-4 bg-gray-800 rounded-2xl hover:bg-blue-600 transition-all shadow-2xl active:scale-90 border border-white/5 text-white" aria-label="LinkedIn"><Linkedin size={24} /></a>
-            <a href="#" className="p-4 bg-gray-800 rounded-2xl hover:bg-blue-600 transition-all shadow-2xl active:scale-90 border border-white/5 text-white" aria-label="Github"><Github size={24} /></a>
-            <a href="mailto:hello@justeneautomation.com" className="p-4 bg-gray-800 rounded-2xl hover:bg-blue-600 transition-all shadow-2xl active:scale-90 border border-white/5 text-white" aria-label="Email"><Mail size={24} /></a>
-          </div>
-        </div>
-        <div className="bg-gray-900/60 p-8 sm:p-12 rounded-[2.5rem] border border-white/10 shadow-2xl shadow-black relative group">
-           <div className="absolute inset-0 bg-blue-600/5 rounded-[2.5rem] -z-10 group-hover:bg-blue-600/10 transition-all duration-700"></div>
-           <form className="space-y-6 sm:space-y-8" onSubmit={(e) => e.preventDefault()}>
-             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-               <div className="space-y-2">
-                 <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 ml-1">First Name</label>
-                 <input type="text" className="w-full bg-black/60 border border-gray-700 rounded-2xl px-6 py-4 sm:py-5 focus:border-blue-500 outline-none transition-all placeholder:text-gray-700 text-base font-bold text-white shadow-inner" placeholder="John" />
+          <div className="bg-gray-900/60 p-8 sm:p-12 rounded-[2.5rem] border border-white/10 shadow-2xl shadow-black relative group">
+             <div className="absolute inset-0 bg-blue-600/5 rounded-[2.5rem] -z-10 group-hover:bg-blue-600/10 transition-all duration-700"></div>
+             
+             {formStatus === 'success' ? (
+               <div className="h-full flex flex-col items-center justify-center text-center space-y-6 py-20 animate-in fade-in zoom-in duration-500">
+                  <div className="w-20 h-20 bg-green-500 rounded-3xl flex items-center justify-center shadow-2xl shadow-green-500/40">
+                    <CheckCircle2 size={40} className="text-white" />
+                  </div>
+                  <h4 className="text-3xl font-black text-white">System Initialized</h4>
+                  <p className="text-gray-400 font-bold max-w-xs">Your inquiry has been routed to my prioritization queue. I'll reach out within 24 hours.</p>
+                  <button onClick={() => setFormStatus('idle')} className="text-blue-500 font-black uppercase text-xs tracking-widest flex items-center gap-2 hover:text-white transition-colors">
+                    <RotateCcw size={16} /> Send Another Inquiry
+                  </button>
                </div>
-               <div className="space-y-2">
-                 <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 ml-1">Business Name</label>
-                 <input type="text" className="w-full bg-black/60 border border-gray-700 rounded-2xl px-6 py-4 sm:py-5 focus:border-blue-500 outline-none transition-all placeholder:text-gray-700 text-base font-bold text-white shadow-inner" placeholder="Acme Growth" />
-               </div>
-             </div>
-             <div className="space-y-2">
-                 <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 ml-1">Email Address</label>
-                 <input type="email" className="w-full bg-black/60 border border-gray-700 rounded-2xl px-6 py-4 sm:py-5 focus:border-blue-500 outline-none transition-all placeholder:text-gray-700 text-base font-bold text-white shadow-inner" placeholder="john@growth.com" />
-               </div>
-             <div className="space-y-2">
-                 <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 ml-1">Current GHL Status</label>
-                 <div className="relative">
-                   <select className="w-full bg-black/60 border border-gray-700 rounded-2xl px-6 py-4 sm:py-5 focus:border-blue-500 outline-none transition-all appearance-none text-base font-bold text-gray-300 cursor-pointer shadow-inner">
-                     <option>Already Using GHL</option>
-                     <option>Thinking of Switching</option>
-                     <option>Need Brand New Setup</option>
-                     <option>Complex Migration Need</option>
-                     <option>Snapshot Development</option>
-                   </select>
-                   <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-blue-500">
-                     <ChevronRight size={20} className="rotate-90" />
+             ) : (
+               <form className="space-y-6 sm:space-y-8" onSubmit={handleSubmit}>
+                 {/* Honeypot field - hidden from users */}
+                 <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" />
+                 
+                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                   <div className="space-y-2">
+                     <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 ml-1">First Name</label>
+                     <input required type="text" className="w-full bg-black/60 border border-gray-700 rounded-2xl px-6 py-4 sm:py-5 focus:border-blue-500 outline-none transition-all placeholder:text-gray-700 text-base font-bold text-white shadow-inner" placeholder="John" />
+                   </div>
+                   <div className="space-y-2">
+                     <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 ml-1">Business Name</label>
+                     <input required type="text" className="w-full bg-black/60 border border-gray-700 rounded-2xl px-6 py-4 sm:py-5 focus:border-blue-500 outline-none transition-all placeholder:text-gray-700 text-base font-bold text-white shadow-inner" placeholder="Acme Growth" />
                    </div>
                  </div>
-               </div>
-             <div className="space-y-2">
-               <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 ml-1">How can I help?</label>
-               <textarea className="w-full bg-black/60 border border-gray-700 rounded-2xl px-6 py-4 sm:py-5 h-32 sm:h-40 focus:border-blue-500 outline-none transition-all placeholder:text-gray-700 text-base font-bold text-white shadow-inner resize-none" placeholder="Tell me about your bottlenecks..."></textarea>
-             </div>
-             <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-5 sm:py-6 rounded-2xl uppercase text-xs sm:text-sm tracking-[0.3em] transition-all transform hover:scale-[1.02] active:scale-95 shadow-2xl shadow-blue-600/40 mt-4 border border-blue-400/20">
-               Initialize Collaboration
-             </button>
-           </form>
+                 <div className="space-y-2">
+                     <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 ml-1">Email Address</label>
+                     <input required type="email" className="w-full bg-black/60 border border-gray-700 rounded-2xl px-6 py-4 sm:py-5 focus:border-blue-500 outline-none transition-all placeholder:text-gray-700 text-base font-bold text-white shadow-inner" placeholder="john@growth.com" />
+                   </div>
+                 <div className="space-y-2">
+                     <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 ml-1">Current GHL Status</label>
+                     <div className="relative">
+                       <select className="w-full bg-black/60 border border-gray-700 rounded-2xl px-6 py-4 sm:py-5 focus:border-blue-500 outline-none transition-all appearance-none text-base font-bold text-gray-300 cursor-pointer shadow-inner">
+                         <option>Already Using GHL</option>
+                         <option>Thinking of Switching</option>
+                         <option>Need Brand New Setup</option>
+                         <option>Complex Migration Need</option>
+                         <option>Snapshot Development</option>
+                       </select>
+                       <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-blue-500">
+                         <ChevronRight size={20} className="rotate-90" />
+                       </div>
+                     </div>
+                   </div>
+                 <div className="space-y-2">
+                   <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 ml-1">How can I help?</label>
+                   <textarea required className="w-full bg-black/60 border border-gray-700 rounded-2xl px-6 py-4 sm:py-5 h-32 sm:h-40 focus:border-blue-500 outline-none transition-all placeholder:text-gray-700 text-base font-bold text-white shadow-inner resize-none" placeholder="Tell me about your bottlenecks..."></textarea>
+                 </div>
+
+                 {/* Human Verification (Captcha) */}
+                 <div className={`p-6 rounded-2xl border transition-all ${formStatus === 'error' ? 'bg-red-500/10 border-red-500/40' : 'bg-blue-600/5 border-blue-500/20'}`}>
+                    <div className="flex flex-col sm:flex-row items-center gap-6 justify-between">
+                      <div className="space-y-1 text-center sm:text-left shrink-0">
+                        <div className="flex items-center gap-2 justify-center sm:justify-start">
+                          <ShieldCheck size={16} className={formStatus === 'error' ? 'text-red-500' : 'text-blue-500'} />
+                          <span className={`text-[10px] font-black uppercase tracking-widest ${formStatus === 'error' ? 'text-red-400' : 'text-gray-400'}`}>
+                            {formStatus === 'error' ? 'Verification Failed' : 'System Verification'}
+                          </span>
+                        </div>
+                        <p className="text-sm text-white font-black italic">What is {challenge.a} + {challenge.b}?</p>
+                      </div>
+                      <div className="relative w-full sm:w-28">
+                        <input 
+                          type="number" 
+                          value={captchaAnswer}
+                          onChange={(e) => setCaptchaAnswer(e.target.value)}
+                          className={`w-full bg-black/80 border rounded-xl px-4 py-3 outline-none text-center font-black text-white ${formStatus === 'error' ? 'border-red-500' : 'border-gray-700 focus:border-blue-500'}`}
+                          placeholder="?"
+                          required
+                        />
+                      </div>
+                    </div>
+                 </div>
+
+                 <button 
+                   disabled={formStatus === 'submitting'}
+                   className={`w-full text-white font-black py-5 sm:py-6 rounded-2xl uppercase text-xs sm:text-sm tracking-[0.3em] transition-all transform hover:scale-[1.02] active:scale-95 shadow-2xl mt-4 border border-blue-400/20 flex items-center justify-center gap-3 ${formStatus === 'submitting' ? 'bg-blue-800' : 'bg-blue-600 hover:bg-blue-700 shadow-blue-600/40'}`}
+                 >
+                   {formStatus === 'submitting' ? (
+                     <>Initialising Secure Connection...</>
+                   ) : (
+                     <>Initialize Collaboration</>
+                   )}
+                 </button>
+                 
+                 {formStatus === 'error' && (
+                   <p className="text-center text-red-500 text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 animate-bounce">
+                     <ShieldAlert size={14} /> Incorrect Verification Answer
+                   </p>
+                 )}
+               </form>
+             )}
+          </div>
         </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 const Footer = () => (
   <footer className="py-12 sm:py-20 px-4 sm:px-6 border-t border-gray-900 bg-black">
@@ -739,9 +833,10 @@ const Footer = () => (
 );
 
 const WhatsAppButton = () => {
-  const phoneNumber = "639638296973"; // Updated with user provided number (international format for Philippines 0963...)
+  const phoneNumber = "639638296973"; 
   const message = "Hi Justene, I'm interested in automating my business systems. Let's talk!";
-  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+  // Using api.whatsapp.com instead of wa.me to bypass common local network certificate errors
+  const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
 
   return (
     <a
@@ -753,7 +848,7 @@ const WhatsAppButton = () => {
     >
       <div className="bg-gray-900/90 backdrop-blur-xl text-white border border-white/10 px-5 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-2xl opacity-80 sm:opacity-60 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-500 pointer-events-none hidden sm:flex items-center gap-3 border-l-4 border-l-[#25D366]">
         <div className="w-1.5 h-1.5 rounded-full bg-[#25D366] animate-pulse shadow-[0_0_8px_#25D366]"></div>
-        Contact me directly on WhatsApp
+        Secure Direct WhatsApp Access
       </div>
       <div className="relative">
         <div className="absolute inset-0 bg-[#25D366] rounded-[1.5rem] blur-2xl opacity-40 animate-pulse group-hover:opacity-70 transition-opacity"></div>
