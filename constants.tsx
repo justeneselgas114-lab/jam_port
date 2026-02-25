@@ -8,11 +8,28 @@ import {
   Mail, 
   Database,
   BarChart3,
-  Cpu
+  Cpu,
+  Code,
+  Globe,
+  Terminal
 } from 'lucide-react';
 import { SkillCategory, ServiceOffer, CaseStudy } from './types';
 
 export const SKILLS: SkillCategory[] = [
+  {
+    title: "Web Development",
+    icon: <Code className="w-6 h-6 text-orange-400" />,
+    skills: [
+      "React.js & Modern JavaScript",
+      "Next.js & SSR/SSG",
+      "Angular.js Applications",
+      "HTML5 & CSS3/Tailwind",
+      "TypeScript Development",
+      "Vite Build Systems",
+      "Responsive Web Design",
+      "API Integration & REST"
+    ]
+  },
   {
     title: "CRM & System Architecture",
     icon: <Database className="w-6 h-6 text-blue-400" />,
@@ -93,29 +110,15 @@ export const CASE_STUDIES: CaseStudy[] = [
   {
     title: "High-Ticket Funnel Architecture",
     category: "Funnel Builds",
-    description: "Multi-step booking funnel with conditional qualifying logic.",
-    imagePlaceholder: "https://picsum.photos/seed/funnel/800/600",
+    description: "Multi-step booking funnel with conditional qualifying logic and automated follow-up sequences.",
+    imagePlaceholder: "https://picsum.photos/seed/funnel/400/300",
     videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4"
   },
   {
     title: "The 'Invisible' Sales Team",
     category: "Workflow Automations",
     description: "Complex automation handling lead nurturing for 6 months post-optin.",
-    imagePlaceholder: "https://picsum.photos/seed/workflow/800/600",
-    videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4"
-  },
-  {
-    title: "Real Estate Pipeline Engine",
-    category: "CRM Pipelines",
-    description: "Customized CRM stages with automated status-triggered follow-ups.",
-    imagePlaceholder: "https://picsum.photos/seed/crm/800/600",
-    videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4"
-  },
-  {
-    title: "Instant Response Messenger Bot",
-    category: "Messenger Bots",
-    description: "FB/IG bot that qualifies leads before sending booking links.",
-    imagePlaceholder: "https://picsum.photos/seed/bot/800/600",
+    imagePlaceholder: "https://picsum.photos/seed/workflow/400/300",
     videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4"
   }
 ];
