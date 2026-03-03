@@ -17,58 +17,74 @@ import { SkillCategory, ServiceOffer, CaseStudy } from './types';
 
 export const SKILLS: SkillCategory[] = [
   {
-    title: "Web Development",
-    icon: <Code className="w-6 h-6 text-orange-400" />,
+    title: "Web Development & Application Engineering",
+    icon: <Code className="w-6 h-6 text-blue-400" />,
     skills: [
       "React.js & Modern JavaScript",
-      "Next.js & SSR/SSG",
+      "Next.js (SSR/SSG Optimization)",
       "Angular.js Applications",
-      "HTML5 & CSS3/Tailwind",
-      "TypeScript Development",
+      "HTML5 / CSS3 / TailwindCSS",
+      "TypeScript Architecture",
       "Vite Build Systems",
-      "Responsive Web Design",
-      "API Integration & REST"
+      "Responsive & Mobile-First Design",
+      "REST API Integration"
     ]
   },
   {
-    title: "CRM & System Architecture",
-    icon: <Database className="w-6 h-6 text-blue-400" />,
+    title: "CRM & Automation Architecture",
+    icon: <Database className="w-6 h-6 text-green-400" />,
     skills: [
-      "Full GoHighLevel Account Setup",
+      "Complete GoHighLevel Account Setup",
       "CRM Pipeline Architecture",
       "Client Journey Mapping",
-      "Data Migration & Snapshot Creation",
-      "SaaS Mode Deployment Support"
+      "Data Migration & Snapshot Systems",
+      "SaaS Mode Deployment Support",
+      "Workflow & Trigger Logic Engineering"
     ]
   },
   {
-    title: "Lead Generation Engines",
+    title: "Lead Generation Systems",
     icon: <UserCheck className="w-6 h-6 text-purple-400" />,
     skills: [
-      "High-Conversion Capture Funnels",
+      "Conversion-Optimized Capture Funnels",
       "Messenger Lead Capture Automation",
-      "Qualifying Logic & Lead Routing",
-      "Automated Prospect Tagging Systems"
+      "Advanced Qualifying Logic",
+      "Automated Lead Routing Systems",
+      "Prospect Tagging & Segmentation"
     ]
   },
   {
-    title: "Marketing Orchestration",
-    icon: <Workflow className="w-6 h-6 text-green-400" />,
+    title: "Marketing Automation & Orchestration",
+    icon: <Workflow className="w-6 h-6 text-orange-400" />,
     skills: [
-      "Multi-Channel Nurturing Workflows",
       "Behavior-Based Automation",
-      "SMS & Email Ecosystem Setup",
-      "Follow-up Sequence Engineering"
+      "Multi-Channel Nurturing Sequences",
+      "SMS & Email Ecosystem Architecture",
+      "Follow-Up Sequence Engineering",
+      "Lifecycle Marketing Systems"
     ]
   },
   {
-    title: "Conversation Automation",
-    icon: <MessageSquare className="w-6 h-6 text-pink-400" />,
+    title: "Conversational Automation & Booking Systems",
+    icon: <MessageSquare className="w-6 h-6 text-cyan-400" />,
     skills: [
       "AI Chatbot Integration",
-      "FB Messenger & IG Automation",
+      "Facebook Messenger Automation",
+      "Instagram DM Automation",
       "Appointment Booking Engines",
-      "Instant Speed-to-Lead Systems"
+      "Speed-to-Lead Automation Systems"
+    ]
+  },
+  {
+    title: "Systems Integration & Scalability",
+    icon: <Globe className="w-6 h-6 text-pink-400" />,
+    skills: [
+      "Webhook & API Automation",
+      "Third-Party Integrations (Stripe, Zapier, Make, etc.)",
+      "Custom JavaScript Embedding",
+      "SaaS White-Label Structuring",
+      "Performance Optimization & Scaling Strategy",
+      "Multi-Subaccount Architecture"
     ]
   }
 ];

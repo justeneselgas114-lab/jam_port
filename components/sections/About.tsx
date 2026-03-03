@@ -33,24 +33,6 @@ const About = () => (
               "My mission is to delete manual work from your schedule so you can focus on high-level scaling—whether that's through custom web applications or automated CRM systems."
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 pt-4">
-            <div className="p-4 bg-gray-800/50 rounded-2xl border border-gray-700 hover:border-blue-500/30 transition-colors">
-              <div className="text-white font-black flex items-center gap-2 mb-2"><CheckCircle2 className="text-blue-500" size={18} /> Strategist</div>
-              <p className="text-[11px] text-gray-500 leading-tight uppercase tracking-wider">Mapping your entire customer journey.</p>
-            </div>
-            <div className="p-4 bg-gray-800/50 rounded-2xl border border-gray-700 hover:border-blue-500/30 transition-colors">
-              <div className="text-white font-black flex items-center gap-2 mb-2"><CheckCircle2 className="text-blue-500" size={18} /> Architect</div>
-              <p className="text-[11px] text-gray-500 leading-tight uppercase tracking-wider">Building unbreakable GHL infrastructures.</p>
-            </div>
-            <div className="p-4 bg-gray-800/50 rounded-2xl border border-gray-700 hover:border-orange-500/30 transition-colors">
-              <div className="text-white font-black flex items-center gap-2 mb-2"><CheckCircle2 className="text-orange-500" size={18} /> Full-Stack Dev</div>
-              <p className="text-[11px] text-gray-500 leading-tight uppercase tracking-wider">Creating modern web applications & custom solutions.</p>
-            </div>
-            <div className="p-4 bg-gray-800/50 rounded-2xl border border-gray-700 hover:border-purple-500/30 transition-colors">
-              <div className="text-white font-black flex items-center gap-2 mb-2"><CheckCircle2 className="text-purple-500" size={18} /> Industry Veteran</div>
-              <p className="text-[11px] text-gray-500 leading-tight uppercase tracking-wider">PropulseVA & Zappify.io automation expertise.</p>
-            </div>
-          </div>
         </div>
       </div>
     </div>
