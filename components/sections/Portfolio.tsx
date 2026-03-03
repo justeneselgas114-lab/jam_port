@@ -215,7 +215,7 @@ const Portfolio = () => {
             </p>
           </div>
 
-          <div className="relative rounded-3xl border border-gray-700/30 bg-gradient-to-br from-gray-800 to-gray-900 mx-auto w-[calc(100%-2rem)] sm:w-[500px] md:w-[600px] h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px]">
+          <div className="relative rounded-3xl border border-gray-700/30 bg-gradient-to-br from-gray-800 to-gray-900 mx-auto w-[calc(100%-2rem)] sm:w-[500px] md:w-[600px] h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden">
             <div 
               ref={funnelSliderRef}
               className="flex transition-transform duration-700 ease-out h-full items-center"
@@ -226,25 +226,18 @@ const Portfolio = () => {
             >
               {funnelImages.map((image, idx) => (
                 <div key={idx} className="flex-shrink-0 w-full h-full flex items-center justify-center p-2 sm:p-4">
-                  <div className={`relative w-full h-full border-2 shadow-2xl group transition-all duration-700 overflow-hidden rounded-2xl ${
+                  <div className={`relative w-full h-full border-2 shadow-2xl overflow-hidden rounded-2xl cursor-pointer transition-all duration-700 ${
                     idx === funnelIndex 
                       ? 'scale-100 opacity-100 border-blue-500 shadow-blue-500/30 shadow-2xl z-20' 
                       : 'scale-70 opacity-40 border-gray-600'
-                  }`}>
+                  }`}
+                  onClick={() => openFullSizeImage(image.src, image.project, image.alt)}>
                     <img 
                       src={image.src} 
                       alt={image.alt}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="w-full h-full object-cover rounded-2xl"
                       loading="lazy"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700 flex items-end justify-center pb-2 sm:pb-4">
-                      <button 
-                        onClick={() => openFullSizeImage(image.src, image.project, image.alt)}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-6 py-2 sm:py-3 rounded-2xl font-black uppercase text-xs tracking-widest transition-all duration-300 transform hover:scale-105 shadow-xl shadow-blue-600/30 text-xs sm:text-sm"
-                      >
-                        View
-                      </button>
-                    </div>
                   </div>
                 </div>
               ))}
@@ -317,7 +310,7 @@ const Portfolio = () => {
             </p>
           </div>
 
-          <div className="relative rounded-3xl border border-gray-700/30 bg-gradient-to-br from-gray-800 to-gray-900 mx-auto w-[calc(100%-2rem)] sm:w-[500px] md:w-[600px] h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px]">
+          <div className="relative rounded-3xl border border-gray-700/30 bg-gradient-to-br from-gray-800 to-gray-900 mx-auto w-[calc(100%-2rem)] sm:w-[500px] md:w-[600px] h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden">
             <div 
               ref={workflowSliderRef}
               className="flex transition-transform duration-700 ease-out h-full items-center"
@@ -328,25 +321,18 @@ const Portfolio = () => {
             >
               {workflowImages.map((workflow, idx) => (
                 <div key={idx} className="flex-shrink-0 w-full h-full flex items-center justify-center p-2 sm:p-4">
-                  <div className={`relative w-full h-full border-2 shadow-2xl group transition-all duration-700 overflow-hidden rounded-2xl ${
+                  <div className={`relative w-full h-full border-2 shadow-2xl overflow-hidden rounded-2xl cursor-pointer transition-all duration-700 ${
                     idx === workflowIndex 
                       ? 'scale-100 opacity-100 border-blue-500 shadow-blue-500/30 shadow-2xl z-20' 
                       : 'scale-70 opacity-40 border-gray-600'
-                  }`}>
+                  }`}
+                  onClick={() => openFullSizeImage(workflow.src, workflow.project, workflow.alt)}>
                     <img 
                       src={workflow.src} 
                       alt={workflow.alt}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="w-full h-full object-cover rounded-2xl"
                       loading="lazy"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700 flex items-end justify-center pb-2 sm:pb-4">
-                      <button 
-                        onClick={() => openFullSizeImage(workflow.src, workflow.project, workflow.alt)}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-6 py-2 sm:py-3 rounded-2xl font-black uppercase text-xs tracking-widest transition-all duration-300 transform hover:scale-105 shadow-xl shadow-blue-600/30 text-xs sm:text-sm"
-                      >
-                        View
-                      </button>
-                    </div>
                   </div>
                 </div>
               ))}
@@ -423,24 +409,38 @@ const Portfolio = () => {
 
       {/* Full Size Image Modal */}
       {fullSizeImage && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/95 backdrop-blur-xl" onClick={closeFullSizeImage}></div>
-          <div className="relative max-w-6xl max-h-[90vh] flex flex-col items-center">
-            <div className="relative w-full h-full max-h-[70vh] mb-6">
+        <div 
+          className="fixed inset-0 z-[200] flex items-center justify-center p-4 animate-fade-in"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              closeFullSizeImage();
+            }
+          }}
+        >
+          <div className="absolute inset-0 bg-black/95 backdrop-blur-xl animate-fade-in"></div>
+          
+          {/* Close Button - Top Left */}
+          <button 
+            onClick={closeFullSizeImage}
+            className="absolute top-6 left-6 z-[210] w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all duration-300 border border-white/20 backdrop-blur-sm group animate-scale-in"
+            aria-label="Close image"
+          >
+            <X className="text-white w-6 h-6 transition-transform duration-300 group-hover:rotate-90" />
+          </button>
+          
+          {/* Image Container */}
+          <div className="relative max-w-7xl max-h-[85vh] flex flex-col items-center animate-scale-in-delay">
+            <div className="relative w-full h-full max-h-[75vh]">
               <img 
                 src={fullSizeImage} 
                 alt="Full size preview"
-                className="w-full h-full object-contain rounded-2xl"
+                className="w-full h-full object-contain rounded-2xl shadow-2xl animate-fade-in-delay"
               />
             </div>
-            <button 
-              onClick={closeFullSizeImage}
-              className="absolute top-4 right-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all border border-white/20"
-            >
-              <X className="text-white" />
-            </button>
-            <div className="text-center space-y-4">
-              <h3 className="text-xl font-black text-white">{currentProject}</h3>
+            
+            {/* Project Info */}
+            <div className="mt-6 text-center space-y-4 animate-slide-up">
+              <h3 className="text-xl sm:text-2xl font-black text-white">{currentProject}</h3>
               {currentProject === 'High-Ticket Funnel Architecture' ? (
                 <button 
                   onClick={() => handleExperienceWebsite(currentImageAlt)}
@@ -448,14 +448,7 @@ const Portfolio = () => {
                 >
                   Experience Website
                 </button>
-              ) : (
-                <button 
-                  onClick={closeFullSizeImage}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-black uppercase text-xs tracking-widest transition-all transform hover:scale-105 active:scale-95 shadow-xl shadow-blue-600/30"
-                >
-                  Close Image
-                </button>
-              )}
+              ) : null}
             </div>
           </div>
         </div>
