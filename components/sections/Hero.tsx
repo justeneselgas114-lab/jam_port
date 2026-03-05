@@ -27,7 +27,6 @@ const Hero = () => (
               </span>
           </div>
           <h1 className="hero-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold leading-[1.1] sm:leading-[1.05] tracking-tight text-white">
-            Own Your Growth. <br />
             <span className="gradient-text">Don’t Chase It.</span>
           </h1>
           <p className="hero-text text-sm sm:text-base md:text-lg lg:text-xl text-gray-400 max-w-2xl lg:max-w-xl leading-relaxed mx-auto lg:mx-0">
